@@ -1,4 +1,17 @@
 require 'textpow'
+require 'choice'
+
+Choice.options do
+    header "Application Options"
+
+    separator "Required:"
+
+    option :syntaxFile, :required => true do
+        short '-s'
+        long '--syntax-file=path_to_file'
+        desc 'The path to the tmSyntax file.'
+    end
+end
 
 class HTMLProcessor
     def open_tag name, position
@@ -47,4 +60,23 @@ class HTMLProcessor
     end
 end
 
-Textpow::SyntaxNode.load("CSPM.tmSyntax").parse($stdin, HTMLProcessor.new)
+class FixedSyntaxNode < Textpow::SyntaxNode
+    def self.load filename, name_space = :default
+        table = nil
+        case filename
+            when /(\.tmSyntax|\.tmLanguage|\.plist)$/
+            table = Plist::parse_xml( filename )
+        else
+            File.open( filename ) do |f|
+                table = YAML.load( f )
+            end
+        end
+        if table
+            FixedSyntaxNode.new( table, nil, name_space )
+        else
+            nil
+        end
+    end
+end
+
+FixedSyntaxNode.load(Choice.choices["syntaxFile"]).parse($stdin, HTMLProcessor.new)
