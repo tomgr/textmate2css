@@ -1,4 +1,4 @@
-require 'textpow'
+require 'textpow19'
 require 'choice'
 
 Choice.options do
