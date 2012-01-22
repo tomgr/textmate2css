@@ -59,16 +59,8 @@ pre.textmate-highlight.#{theme_class} ::selection
 
 pre.textmate-highlight.#{theme_class}
 {
-    margin: 0;
     padding: 0 0 0 0px;
     line-height: 1.3em;
-    word-wrap: break-word;
-    white-space: pre;
-    white-space: pre-wrap;
-    white-space: -moz-pre-wrap;
-    white-space: -o-pre-wrap;
-    font-family: 'Menlo Regular', monospace;
-    font-size: 11pt;
 }
 
 pre.textmate-highlight.#{theme_class} span
@@ -80,9 +72,11 @@ pre.textmate-highlight.#{theme_class} span
 pre.textmate-highlight.#{theme_class} span.line_number
 {
     width: 75px;
-    padding: 0.1em 0.6em 0.2em 0;
+    padding-right: 0.6em;
+    padding-top: 0em;
+    margin-bottom: 0.2em;
     color: #888;
-    background-color: #eee;    
+    background-color: #eee;
 }
 """
 
@@ -92,9 +86,11 @@ settings.each { |d|
 
     next unless scope and name
     
-    print "/* #{name} */\n"
+    print "/* #{scope} */\n"
 
     scope_name = scope.strip
+    scope_name.gsub! /\s+,/, ','
+    scope_name.gsub! /,\s+/, ', '
     scope_name.gsub! /(^|[ ])-[^ ]+/, '' # strip negated scopes
     scope_name.gsub! /\./, '_' # change inner '.' to '_'
     scope_name.gsub! /(^|[ ])/, '\1.'
