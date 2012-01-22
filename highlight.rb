@@ -1,4 +1,5 @@
-require 'textpow19'
+#!/usr/bin/env ruby
+require 'textpow'
 require 'choice'
 
 Choice.options do
